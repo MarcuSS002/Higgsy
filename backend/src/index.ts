@@ -1,20 +1,14 @@
 import express, { json } from "express";
 import {CreateUserSchema, CreateAvatarSchema, SigninSchema} from "./types";
-import { v4 as uuid } from "uuid";
-import { GoogleGenAI } from "@google/genai";
 import {prisma} from "./db";
+import {uuid} from "uuidv4";
 import { createImage } from "./image";
 import dotenv from "dotenv";
 
 const app = express();
 dotenv.config();
 app.use(express.json());
-
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
-});
-
-
+app.use("/assets", express.static("assets"));
 
 app.post("/signup", async (req, res) => {
     try {
@@ -63,63 +57,48 @@ app.post("/signin", async (req,res) => {
     });
 });
 
-// app.post("/avatar", async (req,res) => {
-//     const {success,data} = CreateAvatarSchema.safeParse(req.body);
-//     if(!success) {
-//         return res.status(400).json({
-//             message: "Invalid avatar data"
-//         });
-//     }
-    
-//     const leftProfileId = uuid();
-//     const rightProfileId = uuid();
-//     const frontProfileId = uuid();
-
-//     await Promise.all([
-//     createImage(
-//         "A realistic left side portrait of a young man, studio lighting",
-//         `./assets/${leftProfileId}.png`
-//     ),
-
-//     createImage(
-//         "A realistic right side portrait of a young man, studio lighting",
-//         `./assets/${rightProfileId}.png`
-//     ),
-
-//     createImage(
-//         "A realistic front portrait of a young man, studio lighting",
-//         `./assets/${frontProfileId}.png`
-//     )
-// ]);
-
-
-
-//     // put in s3 and then put in db
-//     await prisma.avatar.create({
-//     data: {
-//       userId: data.userId,
-//       name: data.name
-//     }
-//   })
-  
-//   res.json({});
-// });
 
 app.post("/avatar", async (req, res) => {
-    const { success, data } = CreateAvatarSchema.safeParse(req.body);
+    const {success, data} = CreateAvatarSchema.safeParse(req.body);
 
-    if (!success) {
-        return res.status(400).json(data);
+    if(!success) {
+        return res.status(400).json({
+            message: "Invalid request body",
+        });
     }
 
-    const { prompt } = data;
+    //1.Generate Image
+    const fileName = `${uuid()}.png`;
 
-    await createImage(data.prompt, "./assets/avatar.png");
+    await createImage(data.prompt, `assets/${fileName}`);
 
-    return res.json({
-        message: "Image generated successfully"
+
+    //2. Create Avatar
+    const avatar = await prisma.avatar.create({
+        data: {
+            userId: data.userId,
+            name: data.name
+        }
+    });
+
+    //3. Save image path
+    await prisma.avatarImage.create({
+        data: {
+            avatarId: avatar.id,
+            type: "Model",
+            url: `/assets/${fileName}`
+        }
+    });
+       return res.json({
+        success: true,
+        avatarId: avatar.id,
+        image: `/assets/${fileName}`
     });
 });
+
+   
+
+
 
 app.post("/avatar/:avatarId", async (req,res) => {
     const avatars = await prisma.avatar.findMany({
