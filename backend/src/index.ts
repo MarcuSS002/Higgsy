@@ -1,13 +1,17 @@
 import express, { json } from "express";
-import {CreateUserSchema, CreateAvatarSchema, SigninSchema} from "./types";
-import {prisma} from "./db";
-import {uuid} from "uuidv4";
+import { CreateUserSchema, CreateAvatarSchema, SigninSchema } from "./types";
+import { prisma } from "./db";
+import { uuid } from "uuidv4";
 import { createImage } from "./image";
 import dotenv from "dotenv";
+import { authMiddleware } from "./middleware";
+import jwt from "jsonwebtoken";
+import cors from "cors";
 
 const app = express();
 dotenv.config();
 app.use(express.json());
+app.use(cors());
 app.use("/assets", express.static("assets"));
 
 app.post("/signup", async (req, res) => {
@@ -34,9 +38,9 @@ app.post("/signup", async (req, res) => {
 });
 
 
-app.post("/signin", async (req,res) => {
+app.post("/signin", async (req, res) => {
     const result = SigninSchema.safeParse(req.body);
-    if(!result.success) {
+    if (!result.success) {
         return res.status(400).json(result.error);
     }
 
@@ -51,17 +55,30 @@ app.post("/signin", async (req,res) => {
         return res.status(404).json({ message: "User not found" });
     }
 
+    const token = jwt.sign(
+    {
+        userId: response.id
+    },
+    process.env.JWT_SECRET!,
+    {
+        expiresIn: "7d"
+    }
+);
+
     res.json({
         id: response.id,
-        username: response.username
+        username: response.username,
+        token
     });
+
+    
 });
 
 
-app.post("/avatar", async (req, res) => {
-    const {success, data} = CreateAvatarSchema.safeParse(req.body);
+app.post("/avatar", authMiddleware, async (req, res) => {
+    const { success, data } = CreateAvatarSchema.safeParse(req.body);
 
-    if(!success) {
+    if (!success) {
         return res.status(400).json({
             message: "Invalid request body",
         });
@@ -89,26 +106,81 @@ app.post("/avatar", async (req, res) => {
             url: `/assets/${fileName}`
         }
     });
-       return res.json({
+    return res.json({
         success: true,
         avatarId: avatar.id,
         image: `/assets/${fileName}`
     });
 });
 
-   
+app.get("/avatar/:avatarId", authMiddleware, async (req, res) => {
+    try {
+        const { avatarId } = req.params;
 
+        const avatar = await prisma.avatar.findUnique({
+            where: {
+                id: avatarId
+            },
+            include: {
+                avatarImages: true
+            }
+        });
 
-
-app.post("/avatar/:avatarId", async (req,res) => {
-    const avatars = await prisma.avatar.findMany({
-        where: {
-            userId: "1"
+        if (!avatar) {
+            return res.status(404).json({
+                message: "Avatar not found"
+            });
         }
-    })
-    console.log(avatars);
-    res.json(avatars);
+
+        const images = avatar.avatarImages.map(img => ({
+            ...img,
+            url: `http://localhost:3000${img.url}`
+        }));
+
+        return res.json({
+            ...avatar,
+            avatarImages: images
+        });
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).json(err);
+    }
 });
+
+app.get("/api/v1/avatars", authMiddleware, async (req, res) => {
+    try {
+        const userId = req.query.userId as string; //takes the userId from the URL parameters.
+
+        if (!userId) {
+            return res.status(400).json({
+                message: "userId is required"
+            });
+        }
+
+        const avatars = await prisma.avatar.findMany({
+            where: {
+                userId
+            },
+            include: {
+                avatarImages: true
+            }
+        });
+
+        return res.json({
+            avatars
+        });
+
+    } catch (err) {
+        console.log(err);
+
+        return res.status(500).json({
+            message: "Internal server error"
+        });
+    }
+});
+
+
 
 const PORT = 3000;
 

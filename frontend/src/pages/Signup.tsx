@@ -1,0 +1,59 @@
+import { Card } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+
+export function Signup() {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const navigate = useNavigate();
+    const handleSignup = async () => {
+        try {
+            const response = await axios.post(
+                "http://localhost:3000/signup",
+                {
+                    username,
+                    password,
+                }
+            );
+            navigate("/signin");
+            console.log(response.data);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    return (
+        <div className="min-h-screen flex bg-black">
+            <div className="flex-1">
+
+
+            </div>
+            <div className="flex-1 min-h-screen bg-white flex align-center justify-center">
+            <Card>
+                <Input 
+                    placeholder="Username" 
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                />
+                <Input 
+                    placeholder="Password" 
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+                <Button 
+                    onClick={handleSignup}
+                    variant={"outline"}
+                >
+                    Sign Up
+                </Button>
+            </Card>
+            
+            </div>
+        </div>
+    )
+}
