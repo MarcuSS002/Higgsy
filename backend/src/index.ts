@@ -93,7 +93,7 @@ app.post("/avatar", authMiddleware, async (req, res) => {
     //2. Create Avatar
     const avatar = await prisma.avatar.create({
         data: {
-            userId: data.userId,
+            userId: req.userId,
             name: data.name
         }
     });
@@ -113,7 +113,7 @@ app.post("/avatar", authMiddleware, async (req, res) => {
     });
 });
 
-app.get("/avatar/:avatarId", authMiddleware, async (req, res) => {
+app.get("/avatar/:avatarId", async (req, res) => {
     try {
         const { avatarId } = req.params;
 
@@ -148,15 +148,9 @@ app.get("/avatar/:avatarId", authMiddleware, async (req, res) => {
     }
 });
 
-app.get("/api/v1/avatars", authMiddleware, async (req, res) => {
+app.get("/avatars", authMiddleware, async (req, res) => {
     try {
-        const userId = req.query.userId as string; //takes the userId from the URL parameters.
-
-        if (!userId) {
-            return res.status(400).json({
-                message: "userId is required"
-            });
-        }
+        const userId = req.userId;
 
         const avatars = await prisma.avatar.findMany({
             where: {

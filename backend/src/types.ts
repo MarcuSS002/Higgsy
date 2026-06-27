@@ -13,7 +13,6 @@ export const SigninSchema = z.object({
 });
 
 export const CreateAvatarSchema = z.object({
-    userId: z.string(),
     name: z.string(),
     prompt: z.string()
 });

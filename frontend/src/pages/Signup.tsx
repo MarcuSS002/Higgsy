@@ -10,6 +10,7 @@ export function Signup() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
+
     const handleSignup = async () => {
         try {
             const response = await axios.post(
@@ -28,32 +29,25 @@ export function Signup() {
 
     return (
         <div className="min-h-screen flex bg-black">
-            <div className="flex-1">
-
-
-            </div>
-            <div className="flex-1 min-h-screen bg-white flex align-center justify-center">
-            <Card>
-                <Input 
-                    placeholder="Username" 
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                />
-                <Input 
-                    placeholder="Password" 
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-                <Button 
-                    onClick={handleSignup}
-                    variant={"outline"}
-                >
-                    Sign Up
-                </Button>
-            </Card>
-            
+            <div className="flex-1" />
+            <div className="flex-1 min-h-screen bg-white flex items-center justify-center">
+                <Card className="p-6 space-y-4 w-full max-w-sm">
+                    <Input
+                        placeholder="Username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                    />
+                    <Input
+                        placeholder="Password"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <Button onClick={handleSignup} variant={"outline"}>
+                        Sign Up
+                    </Button>
+                </Card>
             </div>
         </div>
-    )
+    );
 }
