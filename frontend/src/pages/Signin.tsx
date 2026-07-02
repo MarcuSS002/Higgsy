@@ -29,7 +29,7 @@ export const Signin = () => {
     return (
         <div className="min-h-screen flex bg-black">
             <div className="flex-1" />
-            <div className="flex-1 min-h-screen bg-white flex items-center justify-center">
+            <div className="flex-1 h-screen bg-white flex items-center justify-center">
                 <Card className="p-6 space-y-4 w-full max-w-sm">
                     <Input
                         placeholder="Username"

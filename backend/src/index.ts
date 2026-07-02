@@ -161,9 +161,7 @@ app.get("/avatars", authMiddleware, async (req, res) => {
             }
         });
 
-        return res.json({
-            avatars
-        });
+        return res.json(avatars);
 
     } catch (err) {
         console.log(err);
@@ -173,7 +171,6 @@ app.get("/avatars", authMiddleware, async (req, res) => {
         });
     }
 });
-
 
 
 const PORT = 3000;

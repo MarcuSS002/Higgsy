@@ -15,11 +15,7 @@ export function Appbar() {
                         navigate("/signup")
                     }}>Signup</Button>
                 </div>
-                <div className="flex items-center p-2">
-                    <Button className="bg-white text-black hover:bg-gray-200" variant={"outline"} onClick={() => {
-                        navigate("/signin")
-                    }}>Signin</Button>
-                </div>
+                
             </div>
             </div>
     </div>

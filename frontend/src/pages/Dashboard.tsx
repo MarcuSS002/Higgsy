@@ -1,9 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 
 function getAuthHeaders() {
   const token = localStorage.getItem("token");
@@ -39,7 +38,10 @@ async function createAvatar({
 }
 
 async function getAvatars() {
-  const response = await axios.get("http://localhost:3000/avatars", getAuthHeaders());
+  const response = await axios.get(
+    "http://localhost:3000/avatars",
+    getAuthHeaders()
+  );
 
   return response.data;
 }
@@ -48,63 +50,80 @@ export const Dashboard = () => {
   const [prompt, setPrompt] = useState("");
   const [name, setName] = useState("");
 
-  const mutation = useMutation({
-    mutationFn: createAvatar,
-    onSuccess: (data) => {
-      console.log(data);
-    },
-    onError: (error) => {
-      console.error(error);
-    },
-
-    
+  const query = useQuery({
+    queryKey: ["avatars"],
+    queryFn: getAvatars,
   });
 
-  const query = useQuery({
-        queryFn: getAvatars,
-        queryKey: ['avatars']
-    })
-
+  const mutation = useMutation({
+    mutationFn: createAvatar,
+    onSuccess: () => {
+      setPrompt("");
+      setName("");
+      query.refetch();
+    },
+    onError: (err) => {
+      console.error(err);
+    },
+  });
 
   return (
     <div>
       <h1>Dashboard</h1>
 
+      <Input
+        placeholder="Avatar Name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+
+      <Input
+        placeholder="Prompt"
+        value={prompt}
+        onChange={(e) => setPrompt(e.target.value)}
+      />
+
+      <Button
+        onClick={() =>
+          mutation.mutate({
+            prompt,
+            name,
+          })
+        }
+      >
+        Create Avatar
+      </Button>
+
+      <Button onClick={() => query.refetch()}>
+        Refresh Avatars
+      </Button>
+
+      {query.isLoading && <p>Loading...</p>}
+
+      {query.isError && <p>Something went wrong.</p>}
+
       <div>
-        <Input
-          placeholder="Avatar Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
+        <h2>My Avatars</h2>
 
-        <Input
-          placeholder="Prompt (e.g. A superhero wearing red armor)"
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-        />
-
-        <Button
-          onClick={() => {
-            mutation.mutate({
-              prompt,
-              name,
-            });
-          }}
-        >
-          Create Avatar
-        </Button>
-
-            <Button onClick={getAvatars}>
-            Get Avatars
-            </Button>
-      </div>
-
-      <div>
-        <b>Avatar</b>
         {query.data?.map((avatar: any) => (
-          <div >
-            <p>{avatar.name}</p>
-            
+          <div
+            key={avatar.id}
+            style={{
+              border: "1px solid #ddd",
+              padding: "10px",
+              marginBottom: "10px",
+            }}
+          >
+            <h3>{avatar.name}</h3>
+
+            {avatar.avatarImages?.map((image: any) => (
+              <img
+                key={image.id}
+                src={`http://localhost:3000${image.url}`}
+                alt={avatar.name}
+                width={200}
+              />
+            ))}
           </div>
         ))}
       </div>

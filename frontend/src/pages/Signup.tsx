@@ -1,10 +1,12 @@
-import { Card } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import signup from "../assets/signup.jpg";
 
+const imageUrl = signup;
 
 export function Signup() {
     const [username, setUsername] = useState("");
@@ -28,9 +30,19 @@ export function Signup() {
     };
 
     return (
-        <div className="min-h-screen flex bg-black">
-            <div className="flex-1" />
-            <div className="flex-1 min-h-screen bg-white flex items-center justify-center">
+        
+        <div className="fixed inset-0 flex overflow-hidden">
+            {/* Left Side */}
+            <div className="flex-1 h-dvh overflow-hidden">
+                <img
+                    src={imageUrl}
+                    alt="Background"
+                    className="w-full h-full object-cover"
+                />
+            </div>
+
+            {/* Right Side */}
+            <div className="flex-1 h-dvh bg-white flex items-center justify-center overflow-hidden">
                 <Card className="p-6 space-y-4 w-full max-w-sm">
                     <Input
                         placeholder="Username"
@@ -43,7 +55,7 @@ export function Signup() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                    <Button onClick={handleSignup} variant={"outline"}>
+                    <Button onClick={handleSignup} variant="outline">
                         Sign Up
                     </Button>
                 </Card>
