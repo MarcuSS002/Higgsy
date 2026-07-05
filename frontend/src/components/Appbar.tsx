@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "./ui/button";
 
@@ -7,19 +8,22 @@ export function Appbar() {
 
     const isSignupPage = location.pathname === "/signup";
 
-    const userId = localStorage.getItem("userId");
+    const [token, setToken] = useState(localStorage.getItem("token"));
 
-    const isLoggedIn = !userId;
+useEffect(() => {
+    setToken(localStorage.getItem("token"));
+}, [location.pathname]);
 
-    const handleLogout = () => {
-        localStorage.removeItem("userId");
-         localStorage.removeItem("token");
-        navigate("/");
-    };
+const isLoggedIn = !!token;
+
+const handleLogout = () => {
+    localStorage.removeItem("token");
+    setToken(null);
+    navigate("/");
+};
 
     return (
         <div className="bg-black text-white flex justify-between">
-
             <div
                 onClick={() => navigate("/")}
                 className="p-4 text-xl cursor-pointer"
@@ -28,7 +32,6 @@ export function Appbar() {
             </div>
 
             <div className="flex items-center p-2">
-
                 {isLoggedIn ? (
                     <Button onClick={handleLogout}>
                         Logout
@@ -38,15 +41,12 @@ export function Appbar() {
                         className="bg-white text-black hover:bg-gray-200"
                         variant="outline"
                         onClick={() => {
-                            navigate(
-                                isSignupPage ? "/signin" : "/signup"
-                            );
+                            navigate(isSignupPage ? "/signin" : "/signup");
                         }}
                     >
                         {isSignupPage ? "Sign In" : "Sign Up"}
                     </Button>
                 )}
-
             </div>
         </div>
     );

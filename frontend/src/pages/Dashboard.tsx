@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import axios from "axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { API_URL } from "../lib/api";
 
 function getAuthHeaders() {
   const token = localStorage.getItem("token");
@@ -29,7 +30,7 @@ async function createAvatar({
   name: string;
 }) {
   const response = await axios.post(
-    "http://localhost:3000/avatar",
+    `${API_URL}/avatar`,
     {
       prompt,
       name,
@@ -42,7 +43,7 @@ async function createAvatar({
 
 async function getAvatars() {
   const response = await axios.get(
-    "http://localhost:3000/avatars",
+    `${API_URL}/avatars`,
     getAuthHeaders()
   );
 
@@ -51,7 +52,7 @@ async function getAvatars() {
 
 async function deleteAvatar(avatarId: string) {
   const response = await axios.delete(
-    `http://localhost:3000/avatar/${avatarId}`,
+    `${API_URL}/avatar/${avatarId}`,
     getAuthHeaders()
   );
 
@@ -60,7 +61,7 @@ async function deleteAvatar(avatarId: string) {
 
 async function deleteAllAvatars() {
   const response = await axios.delete(
-    "http://localhost:3000/avatars",
+    `${API_URL}/avatars`,
     getAuthHeaders()
   );
 

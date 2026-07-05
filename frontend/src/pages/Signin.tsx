@@ -5,6 +5,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import v1 from "../assets/v1.mp4";
+import { API_URL } from "../lib/api";
 
 export const Signin = () => {
     const [username, setUsername] = useState("");
@@ -15,7 +16,7 @@ export const Signin = () => {
     const handleSignin = async () => {
         try {
             const response = await axios.post(
-                "http://localhost:3000/signin",
+                `${API_URL}/signin`,
                 {
                     username,
                     password,

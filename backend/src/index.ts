@@ -13,7 +13,12 @@ import fs from "fs";
 const app = express();
 dotenv.config();
 app.use(express.json());
-app.use(cors());
+
+app.use(cors({
+  origin: ["https://your-frontend.vercel.app", "http://localhost:3000"],
+  credentials: true
+}));
+
 app.use("/assets", express.static("assets"));
 
 app.post("/signup", async (req, res) => {
@@ -88,7 +93,7 @@ app.post("/avatar", authMiddleware, async (req, res) => {
         const fileName = `${uuid()}.png`;
         const filePath = `assets/${fileName}`;
 
-        console.log("1. Creating image");
+        
 
         await createImage(data.prompt, filePath);
 
@@ -98,7 +103,7 @@ app.post("/avatar", authMiddleware, async (req, res) => {
             folder: "avatars"
         });
 
-        console.log("3. Uploaded to Cloudinary");
+        
 
         // Delete temporary local image
         if (fs.existsSync(filePath)) {
