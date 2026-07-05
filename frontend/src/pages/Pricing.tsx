@@ -14,17 +14,17 @@ export function Pricing() {
             ]}
             items={[
                 {
-                    title: "Starter — $19 / mo",
+                    title: "Starter — Rs.19k / mo",
                     description:
                         "For solo creators who want access to basic generation, a small asset library, and lightweight exports.",
                 },
                 {
-                    title: "Pro — $49 / mo",
+                    title: "Pro — Rs.49k / mo",
                     description:
                         "For growing teams that need higher render limits, brand kits, and a shared review queue.",
                 },
                 {
-                    title: "Studio — $129 / mo",
+                    title: "Studio — Rs.129k / mo",
                     description:
                         "For multi-seat creative teams with advanced permissions, campaign workspaces, and priority support.",
                 },
