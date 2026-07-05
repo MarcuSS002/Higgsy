@@ -7,6 +7,8 @@ import dotenv from "dotenv";
 import { authMiddleware } from "./middleware";
 import jwt from "jsonwebtoken";
 import cors from "cors";
+import { cloudinary } from "./cloudinary";
+import fs from "fs";
 
 const app = express();
 dotenv.config();
@@ -37,14 +39,15 @@ app.post("/signup", async (req, res) => {
     }
 });
 
-
 app.post("/signin", async (req, res) => {
     const result = SigninSchema.safeParse(req.body);
+
     if (!result.success) {
         return res.status(400).json(result.error);
     }
 
     const { username, password } = result.data;
+
     const response = await prisma.user.findUnique({
         where: {
             username
@@ -52,65 +55,92 @@ app.post("/signin", async (req, res) => {
     });
 
     if (!response) {
-        return res.status(404).json({ message: "User not found" });
-    }
-
-    const token = jwt.sign(
-    {
-        userId: response.id
-    },
-    process.env.JWT_SECRET!,
-    {
-        expiresIn: "7d"
-    }
-);
-
-    res.json({
-        id: response.id,
-        username: response.username,
-        token
-    });
-
-    
-});
-
-
-app.post("/avatar", authMiddleware, async (req, res) => {
-    const { success, data } = CreateAvatarSchema.safeParse(req.body);
-
-    if (!success) {
-        return res.status(400).json({
-            message: "Invalid request body",
+        return res.status(404).json({
+            message: "User not found"
         });
     }
 
-    //1.Generate Image
-    const fileName = `${uuid()}.png`;
-
-    await createImage(data.prompt, `assets/${fileName}`);
-
-
-    //2. Create Avatar
-    const avatar = await prisma.avatar.create({
-        data: {
-            userId: req.userId,
-            name: data.name
+    const token = jwt.sign(
+        {
+            userId: response.id
+        },
+        process.env.JWT_SECRET!,
+        {
+            expiresIn: "7d"
         }
-    });
+    );
 
-    //3. Save image path
-    await prisma.avatarImage.create({
-        data: {
+    return res.status(200).json({
+        token
+    });
+});
+
+app.post("/avatar", authMiddleware, async (req, res) => {
+    try {
+        const { success, data } = CreateAvatarSchema.safeParse(req.body);
+
+        if (!success) {
+            return res.status(400).json({
+                message: "Invalid request body"
+            });
+        }
+
+        const fileName = `${uuid()}.png`;
+        const filePath = `assets/${fileName}`;
+
+        console.log("1. Creating image");
+
+        await createImage(data.prompt, filePath);
+
+        console.log("2. Image created:", filePath);
+
+        const uploadResult = await cloudinary.uploader.upload(filePath, {
+            folder: "avatars"
+        });
+
+        console.log("3. Uploaded to Cloudinary");
+
+        // Delete temporary local image
+        if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+        }
+
+        const avatar = await prisma.avatar.create({
+            data: {
+                userId: req.userId,
+                name: data.name
+            }
+        });
+
+        console.log("4. Avatar created");
+
+        await prisma.avatarImage.create({
+            data: {
+                avatarId: avatar.id,
+                type: "Model",
+                url: uploadResult.secure_url,
+                cloudinaryPublicId: uploadResult.public_id
+            }
+        });
+
+        console.log("5. Avatar image saved");
+
+        return res.status(201).json({
+            success: true,
             avatarId: avatar.id,
-            type: "Model",
-            url: `/assets/${fileName}`
-        }
-    });
-    return res.json({
-        success: true,
-        avatarId: avatar.id,
-        image: `/assets/${fileName}`
-    });
+            image: uploadResult.secure_url
+        });
+
+    } catch (error) {
+        console.error("CREATE AVATAR ERROR:", error);
+
+        return res.status(500).json({
+            message: "Failed to create avatar",
+            error: error instanceof Error
+                ? error.message
+                : String(error)
+        });
+    }
 });
 
 app.get("/avatar/:avatarId", async (req, res) => {
@@ -168,6 +198,66 @@ app.get("/avatars", authMiddleware, async (req, res) => {
 
         return res.status(500).json({
             message: "Internal server error"
+        });
+    }
+});
+
+app.delete("/avatar/:avatarId", authMiddleware, async (req, res) => {
+    try {
+        const avatarId = req.params.avatarId;
+        const userId = req.userId;
+
+        const avatar = await prisma.avatar.findFirst({
+            where: {
+                id: avatarId,
+                userId
+            }
+        });
+
+        if (!avatar) {
+            return res.status(404).json({
+                message: "Avatar not found"
+            });
+        }
+
+        await prisma.avatar.delete({
+            where: {
+                id: avatarId
+            }
+        });
+
+        return res.json({
+            message: "Avatar deleted successfully"
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        return res.status(500).json({
+            message: "Failed to delete avatar"
+        });
+    }
+});
+
+app.delete("/avatars", authMiddleware, async (req, res) => {
+    try {
+        const userId = req.userId;
+
+        await prisma.avatar.deleteMany({
+            where: {
+                userId
+            }
+        });
+
+        return res.status(200).json({
+            message: "All avatars deleted successfully"
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        return res.status(500).json({
+            message: "Failed to delete avatars"
         });
     }
 });

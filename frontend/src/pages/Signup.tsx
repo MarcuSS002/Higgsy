@@ -22,43 +22,68 @@ export function Signup() {
                     password,
                 }
             );
-            navigate("/signin");
+
             console.log(response.data);
+            navigate("/signin");
         } catch (err) {
             console.log(err);
         }
     };
 
     return (
-        
-        <div className="fixed inset-0 flex overflow-hidden">
-            {/* Left Side */}
-            <div className="flex-1 h-dvh overflow-hidden">
-                <img
-                    src={imageUrl}
-                    alt="Background"
-                    className="w-full h-full object-cover"
-                />
-            </div>
+        <div className="h-dvh flex flex-col overflow-hidden">
+            
 
-            {/* Right Side */}
-            <div className="flex-1 h-dvh bg-white flex items-center justify-center overflow-hidden">
-                <Card className="p-6 space-y-4 w-full max-w-sm">
-                    <Input
-                        placeholder="Username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+            <div className="flex flex-1 overflow-hidden">
+
+                {/* Left Side */}
+                <div className="relative flex-1 overflow-hidden">
+                    <img
+                        src={imageUrl}
+                        alt="Background"
+                        className="h-full w-full object-cover"
                     />
-                    <Input
-                        placeholder="Password"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <Button onClick={handleSignup} variant="outline">
-                        Sign Up
-                    </Button>
-                </Card>
+
+                    <div className="absolute left-8 top-8">
+                        <span className="inline-block rounded-full bg-black/60 px-3 py-1 text-xs text-white">
+                            4K Resolution
+                        </span>
+
+                        <h1 className="mt-4 text-5xl font-extrabold text-white">
+                            PROPELLO 2.0 4K
+                        </h1>
+
+                        <p className="mt-2 text-lg text-gray-300">
+                            The world's most capable image model at full 4K
+                        </p>
+                    </div>
+                </div>
+
+                {/* Right Side */}
+                <div className="flex flex-1 items-center justify-center bg-white overflow-hidden">
+                    <Card className="w-full max-w-sm space-y-4 p-6">
+                        <Input
+                            placeholder="Username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                        />
+
+                        <Input
+                            placeholder="Password"
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+
+                        <Button
+                            onClick={handleSignup}
+                            variant="outline"
+                        >
+                            Sign Up
+                        </Button>
+                    </Card>
+                </div>
+
             </div>
         </div>
     );

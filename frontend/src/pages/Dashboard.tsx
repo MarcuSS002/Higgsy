@@ -1,5 +1,8 @@
+// Dashboard.tsx
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Card } from "@/components/ui/card";
 import axios from "axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -46,6 +49,24 @@ async function getAvatars() {
   return response.data;
 }
 
+async function deleteAvatar(avatarId: string) {
+  const response = await axios.delete(
+    `http://localhost:3000/avatar/${avatarId}`,
+    getAuthHeaders()
+  );
+
+  return response.data;
+}
+
+async function deleteAllAvatars() {
+  const response = await axios.delete(
+    "http://localhost:3000/avatars",
+    getAuthHeaders()
+  );
+
+  return response.data;
+}
+
 export const Dashboard = () => {
   const [prompt, setPrompt] = useState("");
   const [name, setName] = useState("");
@@ -55,77 +76,175 @@ export const Dashboard = () => {
     queryFn: getAvatars,
   });
 
-  const mutation = useMutation({
+  const createMutation = useMutation({
     mutationFn: createAvatar,
+
     onSuccess: () => {
       setPrompt("");
       setName("");
       query.refetch();
     },
-    onError: (err) => {
-      console.error(err);
+
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: deleteAvatar,
+
+    onSuccess: () => {
+      query.refetch();
+    },
+
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+
+  const deleteAllMutation = useMutation({
+    mutationFn: deleteAllAvatars,
+
+    onSuccess: () => {
+      query.refetch();
+    },
+
+    onError: (error) => {
+      console.error(error);
     },
   });
 
   return (
-    <div>
-      <h1>Dashboard</h1>
+    <div className="min-h-screen bg-zinc-950 px-6 py-10 text-white">
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-10">
+          <h1 className="text-4xl font-bold">
+            Avatar Dashboard
+          </h1>
 
-      <Input
-        placeholder="Avatar Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
+          <p className="mt-2 text-zinc-400">
+            Create and manage your AI avatars.
+          </p>
+        </div>
 
-      <Input
-        placeholder="Prompt"
-        value={prompt}
-        onChange={(e) => setPrompt(e.target.value)}
-      />
+        <Card className="mb-10 border-zinc-800 bg-zinc-900 p-6">
+          <h2 className="mb-5 text-center text-xl font-semibold text-white">
+            Create a New Avatar
+          </h2>
 
-      <Button
-        onClick={() =>
-          mutation.mutate({
-            prompt,
-            name,
-          })
-        }
-      >
-        Create Avatar
-      </Button>
+          <div className="flex flex-col gap-4">
+            <Input
+              placeholder="Avatar name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="border-zinc-700 bg-zinc-950 text-white"
+            />
 
-      <Button onClick={() => query.refetch()}>
-        Refresh Avatars
-      </Button>
+            <Input
+              placeholder="Describe your avatar..."
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              className="border-zinc-700 bg-zinc-950 text-white"
+            />
 
-      {query.isLoading && <p>Loading...</p>}
-
-      {query.isError && <p>Something went wrong.</p>}
-
-      <div>
-        <h2>My Avatars</h2>
-
-        {query.data?.map((avatar: any) => (
-          <div
-            key={avatar.id}
-            style={{
-              border: "1px solid #ddd",
-              padding: "10px",
-              marginBottom: "10px",
-            }}
-          >
-            <h3>{avatar.name}</h3>
-
-            {avatar.avatarImages?.map((image: any) => (
-              <img
-                key={image.id}
-                src={`http://localhost:3000${image.url}`}
-                alt={avatar.name}
-                width={200}
-              />
-            ))}
+            <Button
+              variant="outline"
+              disabled={createMutation.isPending}
+              onClick={() =>
+                createMutation.mutate({
+                  prompt,
+                  name,
+                })
+              }
+              className="w-fit text-black"
+            >
+              {createMutation.isPending
+                ? "Creating..."
+                : "Create Avatar"}
+            </Button>
           </div>
-        ))}
+        </Card>
+
+        <div className="mb-6 flex items-center justify-between">
+          <h2 className="text-2xl font-semibold">
+            My Avatars
+          </h2>
+
+          <div className="flex gap-3">
+            <Button
+              variant="outline"
+              className="text-black"
+              onClick={() => query.refetch()}
+            >
+              Refresh
+            </Button>
+
+            <Button
+              variant="destructive"
+              disabled={
+                deleteAllMutation.isPending ||
+                !query.data?.length
+              }
+              onClick={() => deleteAllMutation.mutate()}
+            >
+              {deleteAllMutation.isPending
+                ? "Deleting..."
+                : "Delete All"}
+            </Button>
+          </div>
+        </div>
+
+        {query.isLoading && (
+          <p className="text-zinc-400">
+            Loading avatars...
+          </p>
+        )}
+
+        {query.isError && (
+          <p className="text-red-400">
+            Something went wrong.
+          </p>
+        )}
+
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {query.data?.map((avatar: any) => (
+            <Card
+              key={avatar.id}
+              className="overflow-hidden border-zinc-800 bg-zinc-900 transition hover:-translate-y-1"
+            >
+              {avatar.avatarImages?.[0] && (
+                <img
+                  src={avatar.avatarImages[0].url}
+                  alt={avatar.name}
+                  className="h-64 w-full object-cover"
+                />
+              )}
+
+              <div className="p-5">
+                <h3 className="text-lg font-semibold text-white">
+                  {avatar.name}
+                </h3>
+
+                <p className="mt-1 text-sm text-zinc-400">
+                  AI Generated Avatar
+                </p>
+
+                <Button
+                  variant="destructive"
+                  className="mt-4 w-full"
+                  disabled={deleteMutation.isPending}
+                  onClick={() =>
+                    deleteMutation.mutate(avatar.id)
+                  }
+                >
+                  {deleteMutation.isPending
+                    ? "Deleting..."
+                    : "Delete"}
+                </Button>
+              </div>
+            </Card>
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -19,17 +19,20 @@ model Avatar {
   id                    String                 @id @default(uuid())
   userId                String
   name                  String
-  user                  User                   @relation(fields: [userId], references: [id])
+
+  user                  User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
   avatarImages          AvatarImage[]
   avatarVideoReferences AvatarVideoReference[]
 }
 
 model AvatarImage {
-  id       String          @id @default(uuid())
-  avatarId String
-  type     AvatarImageType
-  url      String
-  avatar   Avatar          @relation(fields: [avatarId], references: [id])
+  id                 String          @id @default(uuid())
+  avatarId           String
+  type               AvatarImageType
+  url                String
+  cloudinaryPublicId String
+
+  avatar Avatar @relation(fields: [avatarId], references: [id], onDelete: Cascade)
 }
 
 model AvatarVideo {
@@ -42,7 +45,8 @@ model AvatarVideo {
   width                 Int
   height                Int
   status                AvatarVideoStatus
-  user                  User                   @relation(fields: [userId], references: [id])
+
+  user                  User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
   avatarVideoReferences AvatarVideoReference[]
 }
 
@@ -50,8 +54,9 @@ model AvatarVideoReference {
   id            String      @id @default(uuid())
   avatarVideoId String
   avatarId      String
-  avatar        Avatar      @relation(fields: [avatarId], references: [id])
-  avatarVideo   AvatarVideo @relation(fields: [avatarVideoId], references: [id])
+
+  avatar        Avatar      @relation(fields: [avatarId], references: [id], onDelete: Cascade)
+  avatarVideo   AvatarVideo @relation(fields: [avatarVideoId], references: [id], onDelete: Cascade)
 }
 
 enum AvatarImageType {

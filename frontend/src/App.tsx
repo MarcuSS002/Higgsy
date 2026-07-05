@@ -8,6 +8,10 @@ import { Signin } from "./pages/Signin";
 import { Signup } from "./pages/Signup";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import { Dashboard } from "./pages/Dashboard";
+import { About } from "./pages/About";
+import { Pricing } from "./pages/Pricing";
+import { Contact } from "./pages/Contact";
+import { Privacy } from "./pages/Privacy";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +24,10 @@ function App() {
         <Routes>
           { <Route path = "/" element = {<Landing/>} />}
           {/* <Route path="/video-creator" element={<VideoCreator />} /> */}
+          <Route path = "/about" element = {<About />} />
+          <Route path = "/pricing" element = {<Pricing />} />
+          <Route path = "/contact" element = {<Contact />} />
+          <Route path = "/privacy" element = {<Privacy />} />
           <Route path = "/signup" element = {<Signup />} />
           <Route path = "/signin" element = {<Signin />} />
           <Route path = "/dashboard" element = {<Dashboard />} />

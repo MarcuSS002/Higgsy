@@ -29,6 +29,7 @@ export type AvatarImageMinAggregateOutputType = {
   avatarId: string | null
   type: $Enums.AvatarImageType | null
   url: string | null
+  cloudinaryPublicId: string | null
 }
 
 export type AvatarImageMaxAggregateOutputType = {
@@ -36,6 +37,7 @@ export type AvatarImageMaxAggregateOutputType = {
   avatarId: string | null
   type: $Enums.AvatarImageType | null
   url: string | null
+  cloudinaryPublicId: string | null
 }
 
 export type AvatarImageCountAggregateOutputType = {
@@ -43,6 +45,7 @@ export type AvatarImageCountAggregateOutputType = {
   avatarId: number
   type: number
   url: number
+  cloudinaryPublicId: number
   _all: number
 }
 
@@ -52,6 +55,7 @@ export type AvatarImageMinAggregateInputType = {
   avatarId?: true
   type?: true
   url?: true
+  cloudinaryPublicId?: true
 }
 
 export type AvatarImageMaxAggregateInputType = {
@@ -59,6 +63,7 @@ export type AvatarImageMaxAggregateInputType = {
   avatarId?: true
   type?: true
   url?: true
+  cloudinaryPublicId?: true
 }
 
 export type AvatarImageCountAggregateInputType = {
@@ -66,6 +71,7 @@ export type AvatarImageCountAggregateInputType = {
   avatarId?: true
   type?: true
   url?: true
+  cloudinaryPublicId?: true
   _all?: true
 }
 
@@ -146,6 +152,7 @@ export type AvatarImageGroupByOutputType = {
   avatarId: string
   type: $Enums.AvatarImageType
   url: string
+  cloudinaryPublicId: string
   _count: AvatarImageCountAggregateOutputType | null
   _min: AvatarImageMinAggregateOutputType | null
   _max: AvatarImageMaxAggregateOutputType | null
@@ -174,6 +181,7 @@ export type AvatarImageWhereInput = {
   avatarId?: Prisma.StringFilter<"AvatarImage"> | string
   type?: Prisma.EnumAvatarImageTypeFilter<"AvatarImage"> | $Enums.AvatarImageType
   url?: Prisma.StringFilter<"AvatarImage"> | string
+  cloudinaryPublicId?: Prisma.StringFilter<"AvatarImage"> | string
   avatar?: Prisma.XOR<Prisma.AvatarScalarRelationFilter, Prisma.AvatarWhereInput>
 }
 
@@ -182,6 +190,7 @@ export type AvatarImageOrderByWithRelationInput = {
   avatarId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   url?: Prisma.SortOrder
+  cloudinaryPublicId?: Prisma.SortOrder
   avatar?: Prisma.AvatarOrderByWithRelationInput
 }
 
@@ -193,6 +202,7 @@ export type AvatarImageWhereUniqueInput = Prisma.AtLeast<{
   avatarId?: Prisma.StringFilter<"AvatarImage"> | string
   type?: Prisma.EnumAvatarImageTypeFilter<"AvatarImage"> | $Enums.AvatarImageType
   url?: Prisma.StringFilter<"AvatarImage"> | string
+  cloudinaryPublicId?: Prisma.StringFilter<"AvatarImage"> | string
   avatar?: Prisma.XOR<Prisma.AvatarScalarRelationFilter, Prisma.AvatarWhereInput>
 }, "id">
 
@@ -201,6 +211,7 @@ export type AvatarImageOrderByWithAggregationInput = {
   avatarId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   url?: Prisma.SortOrder
+  cloudinaryPublicId?: Prisma.SortOrder
   _count?: Prisma.AvatarImageCountOrderByAggregateInput
   _max?: Prisma.AvatarImageMaxOrderByAggregateInput
   _min?: Prisma.AvatarImageMinOrderByAggregateInput
@@ -214,12 +225,14 @@ export type AvatarImageScalarWhereWithAggregatesInput = {
   avatarId?: Prisma.StringWithAggregatesFilter<"AvatarImage"> | string
   type?: Prisma.EnumAvatarImageTypeWithAggregatesFilter<"AvatarImage"> | $Enums.AvatarImageType
   url?: Prisma.StringWithAggregatesFilter<"AvatarImage"> | string
+  cloudinaryPublicId?: Prisma.StringWithAggregatesFilter<"AvatarImage"> | string
 }
 
 export type AvatarImageCreateInput = {
   id?: string
   type: $Enums.AvatarImageType
   url: string
+  cloudinaryPublicId: string
   avatar: Prisma.AvatarCreateNestedOneWithoutAvatarImagesInput
 }
 
@@ -228,12 +241,14 @@ export type AvatarImageUncheckedCreateInput = {
   avatarId: string
   type: $Enums.AvatarImageType
   url: string
+  cloudinaryPublicId: string
 }
 
 export type AvatarImageUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumAvatarImageTypeFieldUpdateOperationsInput | $Enums.AvatarImageType
   url?: Prisma.StringFieldUpdateOperationsInput | string
+  cloudinaryPublicId?: Prisma.StringFieldUpdateOperationsInput | string
   avatar?: Prisma.AvatarUpdateOneRequiredWithoutAvatarImagesNestedInput
 }
 
@@ -242,6 +257,7 @@ export type AvatarImageUncheckedUpdateInput = {
   avatarId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumAvatarImageTypeFieldUpdateOperationsInput | $Enums.AvatarImageType
   url?: Prisma.StringFieldUpdateOperationsInput | string
+  cloudinaryPublicId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type AvatarImageCreateManyInput = {
@@ -249,12 +265,14 @@ export type AvatarImageCreateManyInput = {
   avatarId: string
   type: $Enums.AvatarImageType
   url: string
+  cloudinaryPublicId: string
 }
 
 export type AvatarImageUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumAvatarImageTypeFieldUpdateOperationsInput | $Enums.AvatarImageType
   url?: Prisma.StringFieldUpdateOperationsInput | string
+  cloudinaryPublicId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type AvatarImageUncheckedUpdateManyInput = {
@@ -262,6 +280,7 @@ export type AvatarImageUncheckedUpdateManyInput = {
   avatarId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumAvatarImageTypeFieldUpdateOperationsInput | $Enums.AvatarImageType
   url?: Prisma.StringFieldUpdateOperationsInput | string
+  cloudinaryPublicId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type AvatarImageListRelationFilter = {
@@ -279,6 +298,7 @@ export type AvatarImageCountOrderByAggregateInput = {
   avatarId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   url?: Prisma.SortOrder
+  cloudinaryPublicId?: Prisma.SortOrder
 }
 
 export type AvatarImageMaxOrderByAggregateInput = {
@@ -286,6 +306,7 @@ export type AvatarImageMaxOrderByAggregateInput = {
   avatarId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   url?: Prisma.SortOrder
+  cloudinaryPublicId?: Prisma.SortOrder
 }
 
 export type AvatarImageMinOrderByAggregateInput = {
@@ -293,6 +314,7 @@ export type AvatarImageMinOrderByAggregateInput = {
   avatarId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   url?: Prisma.SortOrder
+  cloudinaryPublicId?: Prisma.SortOrder
 }
 
 export type AvatarImageCreateNestedManyWithoutAvatarInput = {
@@ -345,12 +367,14 @@ export type AvatarImageCreateWithoutAvatarInput = {
   id?: string
   type: $Enums.AvatarImageType
   url: string
+  cloudinaryPublicId: string
 }
 
 export type AvatarImageUncheckedCreateWithoutAvatarInput = {
   id?: string
   type: $Enums.AvatarImageType
   url: string
+  cloudinaryPublicId: string
 }
 
 export type AvatarImageCreateOrConnectWithoutAvatarInput = {
@@ -387,30 +411,35 @@ export type AvatarImageScalarWhereInput = {
   avatarId?: Prisma.StringFilter<"AvatarImage"> | string
   type?: Prisma.EnumAvatarImageTypeFilter<"AvatarImage"> | $Enums.AvatarImageType
   url?: Prisma.StringFilter<"AvatarImage"> | string
+  cloudinaryPublicId?: Prisma.StringFilter<"AvatarImage"> | string
 }
 
 export type AvatarImageCreateManyAvatarInput = {
   id?: string
   type: $Enums.AvatarImageType
   url: string
+  cloudinaryPublicId: string
 }
 
 export type AvatarImageUpdateWithoutAvatarInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumAvatarImageTypeFieldUpdateOperationsInput | $Enums.AvatarImageType
   url?: Prisma.StringFieldUpdateOperationsInput | string
+  cloudinaryPublicId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type AvatarImageUncheckedUpdateWithoutAvatarInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumAvatarImageTypeFieldUpdateOperationsInput | $Enums.AvatarImageType
   url?: Prisma.StringFieldUpdateOperationsInput | string
+  cloudinaryPublicId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type AvatarImageUncheckedUpdateManyWithoutAvatarInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumAvatarImageTypeFieldUpdateOperationsInput | $Enums.AvatarImageType
   url?: Prisma.StringFieldUpdateOperationsInput | string
+  cloudinaryPublicId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -420,6 +449,7 @@ export type AvatarImageSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   avatarId?: boolean
   type?: boolean
   url?: boolean
+  cloudinaryPublicId?: boolean
   avatar?: boolean | Prisma.AvatarDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["avatarImage"]>
 
@@ -428,6 +458,7 @@ export type AvatarImageSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   avatarId?: boolean
   type?: boolean
   url?: boolean
+  cloudinaryPublicId?: boolean
   avatar?: boolean | Prisma.AvatarDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["avatarImage"]>
 
@@ -436,6 +467,7 @@ export type AvatarImageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   avatarId?: boolean
   type?: boolean
   url?: boolean
+  cloudinaryPublicId?: boolean
   avatar?: boolean | Prisma.AvatarDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["avatarImage"]>
 
@@ -444,9 +476,10 @@ export type AvatarImageSelectScalar = {
   avatarId?: boolean
   type?: boolean
   url?: boolean
+  cloudinaryPublicId?: boolean
 }
 
-export type AvatarImageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "avatarId" | "type" | "url", ExtArgs["result"]["avatarImage"]>
+export type AvatarImageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "avatarId" | "type" | "url" | "cloudinaryPublicId", ExtArgs["result"]["avatarImage"]>
 export type AvatarImageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   avatar?: boolean | Prisma.AvatarDefaultArgs<ExtArgs>
 }
@@ -467,6 +500,7 @@ export type $AvatarImagePayload<ExtArgs extends runtime.Types.Extensions.Interna
     avatarId: string
     type: $Enums.AvatarImageType
     url: string
+    cloudinaryPublicId: string
   }, ExtArgs["result"]["avatarImage"]>
   composites: {}
 }
@@ -895,6 +929,7 @@ export interface AvatarImageFieldRefs {
   readonly avatarId: Prisma.FieldRef<"AvatarImage", 'String'>
   readonly type: Prisma.FieldRef<"AvatarImage", 'AvatarImageType'>
   readonly url: Prisma.FieldRef<"AvatarImage", 'String'>
+  readonly cloudinaryPublicId: Prisma.FieldRef<"AvatarImage", 'String'>
 }
     
 

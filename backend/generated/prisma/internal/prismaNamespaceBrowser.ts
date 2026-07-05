@@ -96,7 +96,8 @@ export const AvatarImageScalarFieldEnum = {
   id: 'id',
   avatarId: 'avatarId',
   type: 'type',
-  url: 'url'
+  url: 'url',
+  cloudinaryPublicId: 'cloudinaryPublicId'
 } as const
 
 export type AvatarImageScalarFieldEnum = (typeof AvatarImageScalarFieldEnum)[keyof typeof AvatarImageScalarFieldEnum]
