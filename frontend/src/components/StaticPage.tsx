@@ -81,6 +81,7 @@ export function StaticPage({
                     {note}
                 </section>
             </main>
+            
             <Footer />
         </div>
     );

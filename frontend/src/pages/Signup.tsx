@@ -1,4 +1,3 @@
-import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -33,7 +32,7 @@ export function Signup() {
 
     return (
         <div className="h-dvh flex flex-col overflow-hidden">
-            
+
 
             <div className="flex flex-1 overflow-hidden">
 
@@ -60,29 +59,68 @@ export function Signup() {
                     </div>
                 </div>
 
+                
                 {/* Right Side */}
-                <div className="flex flex-1 items-center justify-center bg-white overflow-hidden">
-                    <Card className="w-full max-w-sm space-y-4 p-6">
-                        <Input
-                            placeholder="Username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                        />
+                <div className="flex flex-1 items-center justify-center bg-black px-16">
 
-                        <Input
-                            placeholder="Password"
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
+                    <div className="w-full max-w-xl">
 
+                        {/* Heading */}
+                        <div className="mb-10">
+                            <h2 className="text-[56px] font-semibold text-white leading-none">
+                                Sign Up
+                            </h2>
+
+                            <p className="mt-2 text-[18px] text-[#A1A1AA]">
+                                Already have an account?{" "}
+                                <span
+                                    onClick={() => navigate("/signin")}
+                                    className="text-[#FF5A1F] cursor-pointer"
+                                >
+                                    Sign in
+                                </span>
+                            </p>
+                        </div>
+
+                        {/* Username */}
+                        <div className="mb-6">
+                            <label className="block mb-3 text-[16px] text-white">
+                                Username
+                            </label>
+
+                            <Input
+                                placeholder="Enter your username here"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                className="h-14 bg-transparent border border-[#27272A] text-white placeholder:text-[#71717A] rounded-lg"
+                            />
+                        </div>
+
+                        {/* Password */}
+                        <div className="mb-8">
+                            <label className="block mb-3 text-[16px] text-white">
+                                Password
+                            </label>
+
+                            <Input
+                                type="password"
+                                placeholder="Enter your password here"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="h-14 bg-transparent border border-[#27272A] text-white placeholder:text-[#71717A] rounded-lg"
+                            />
+                        </div>
+
+                        {/* Button */}
                         <Button
                             onClick={handleSignup}
-                            variant="outline"
+                            className="w-full h-14 bg-[#FF5A1F] hover:bg-[#E94E16] text-white text-[16px] font-medium rounded-lg"
                         >
-                            Sign Up
+                            Create Account
                         </Button>
-                    </Card>
+
+                    </div>
+
                 </div>
 
             </div>

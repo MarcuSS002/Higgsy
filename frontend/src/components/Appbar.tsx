@@ -10,17 +10,17 @@ export function Appbar() {
 
     const [token, setToken] = useState(localStorage.getItem("token"));
 
-useEffect(() => {
-    setToken(localStorage.getItem("token"));
-}, [location.pathname]);
+    useEffect(() => {
+        setToken(localStorage.getItem("token"));
+    }, [location.pathname]);
 
-const isLoggedIn = !!token;
+    const isLoggedIn = !!token;
 
-const handleLogout = () => {
-    localStorage.removeItem("token");
-    setToken(null);
-    navigate("/");
-};
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        setToken(null);
+        navigate("/");
+    };
 
     return (
         <div className="bg-black text-white flex justify-between">
@@ -47,6 +47,10 @@ const handleLogout = () => {
                         {isSignupPage ? "Sign In" : "Sign Up"}
                     </Button>
                 )}
+
+                <Button onClick={() => navigate("/signin")} className="ml-4 bg-[#022954] text-white hover:bg-[#022954]/80">
+                    Log In
+                </Button>
             </div>
         </div>
     );

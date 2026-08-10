@@ -2,7 +2,9 @@ import { PromoCard } from "@/components/PromoCard";
 import { Video } from "../components/Video";
 import { FeatureCard } from "../components/FeatureCard";
 import { Footer } from "@/components/Footer";
-
+import Scroll1 from "./Scroll1";
+import p4 from "../assets/p4.webp";
+import p2 from "../assets/p2.webp";
 import {
     Carousel,
     CarouselContent,
@@ -74,28 +76,30 @@ export const Landing = () => {
             </div>
 
 
-            <div className="grid grid-cols-6 gap-6">
+            <div className="grid grid-cols-6 gap-4 px-8 py-6 mt-8">
                 <div className="col-span-4">
                     <PromoCard />
                 </div>
 
-                <div className="m-3.5 col-span-2 flex flex-col gap-2">
-                    <FeatureCard
-                        title="Create with Pollinations AI ✨"
-                        description="Your autonomous AI agent that turns ideas into action and gets tasks done for you."
-
-                    />
-
-                    <FeatureCard
-                        
-                        title="Google Gemini"
-                        description="AI Companion that can generate images, videos, and 3D models from text prompts."
-                        image="https://static.vecteezy.com/system/resources/previews/070/779/929/non_2x/google-gemini-app-icon-on-a-transparent-background-free-png.png"
-                    />
-
+                <div className="col-span-2 flex flex-col gap-4">
+                    <div className="flex-1">
+                        <FeatureCard
+                            title="Create with Pollinations AI"
+                            description="Your autonomous AI agent that turns ideas into action and gets tasks done for you."
+                            image={p4}
+                        />
+                    </div>
+                    <div className="flex-1">
+                        <FeatureCard
+                            title="Cloudinary"
+                            description="Used Cloudinary to store avatar images in the cloud and save their URLs in the database."
+                            image={p2}
+                        />
+                    </div>
                 </div>
-                
             </div>
+            <Scroll1 />
+
             <Footer />
         </div>
     );
