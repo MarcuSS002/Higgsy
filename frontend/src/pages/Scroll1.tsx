@@ -2,10 +2,10 @@ import { useEffect } from "react";
 import v2 from "../assets/v2.webm";
 
 const STATS = [
-  { value: "10K+", label: "Developers Placed" },
-  { value: "94%", label: "Placement Rate" },
-  { value: "4.8★", label: "Avg Rating" },
-  { value: "120+", label: "Hiring Partners" },
+  { value: "1000+", label: "Images Generated" },
+  { value: "<5s", label: "Avg Generation Time" },
+  { value: "Cloud", label: "Image Storage" },
+  { value: "100%", label: "Responsive Design" },
 ];
 
 
@@ -105,18 +105,40 @@ export default function Scroll1() {
         </div>
 
       {/* Stats bar */}
-      <div className="relative z-10 w-full max-w-3xl grid grid-cols-2 sm:grid-cols-4 border border-white/10 rounded-2xl overflow-hidden divide-x divide-white/10">
-          {STATS.map((s) => (
-            <div key={s.label} className="bg-black/90 py-7 px-4 text-center">
-              <div className="text-3xl font-black text-white tracking-tight leading-none mb-1.5">
-                {s.value}
-              </div>
-              <div className="text-[11px] uppercase tracking-widest text-zinc-500 font-medium">
-                {s.label}
-              </div>
-            </div>
-          ))}
+      <div className="relative mt-15 z-10 w-full max-w-4xl mx-auto">
+  <div className="relative grid grid-cols-2 sm:grid-cols-4 rounded-3xl overflow-hidden border border-white/10 bg-white/[0.03] backdrop-blur-xl">
+
+    {/* top highlight */}
+    <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
+
+    {STATS.map((s, index) => (
+      <div
+        key={s.label}
+        className={`group relative py-8 px-5 text-center transition-all duration-500 hover:bg-white/[0.04] ${
+          index !== STATS.length - 1 ? "border-r border-white/10" : ""
+        }`}
+      >
+        {/* background number */}
+        <span className="absolute inset-0 flex items-center justify-center text-6xl font-black text-white/[0.03] group-hover:text-white/[0.06] transition-all duration-500">
+          {s.value}
+        </span>
+
+        <div className="relative">
+          <h3 className="text-4xl font-extrabold bg-gradient-to-b from-white to-zinc-400 bg-clip-text text-transparent">
+            {s.value}
+          </h3>
+
+          <p className="mt-2 text-[10px] uppercase tracking-[0.3em] text-zinc-500">
+            {s.label}
+          </p>
         </div>
+
+        {/* hover glow */}
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-b from-white/[0.03] to-transparent pointer-events-none" />
+      </div>
+    ))}
+  </div>
+</div>
       </section>
     </div>
   );
