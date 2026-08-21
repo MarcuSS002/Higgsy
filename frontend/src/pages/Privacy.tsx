@@ -44,7 +44,6 @@ export function Privacy() {
                         "We would update the policy when features change and surface the latest version inside the app footer.",
                 },
             ]}
-            note="This privacy page is demo copy, not legal advice. Replace it with an actual policy before shipping anything public."
         />
     );
 }
