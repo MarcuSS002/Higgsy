@@ -40,8 +40,7 @@ export default function Scroll1() {
 
         {/* Subheading */}
         <p className="relative z-10 max-w-lg text-base sm:text-lg text-zinc-400 leading-relaxed mb-10">
-          Stop watching tutorials. Start shipping. Learn full-stack development
-          by building production-grade products from day one.
+          Start creating your own products with our easy-to-use platform. No coding required, just drag and drop to bring your ideas to life.
         </p>
 
         <div className="relative z-10 w-full max-w-6xl mx-auto">
