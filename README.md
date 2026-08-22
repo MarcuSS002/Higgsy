@@ -1,4 +1,4 @@
-# Higgsfield
+# Framecraft
 
 Higgsfield is an avatar studio built around a simple loop: sign in, describe a character, generate a 1024x1024 image, store it, and keep the result tied to your account.
 
